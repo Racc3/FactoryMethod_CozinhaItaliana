@@ -15,13 +15,15 @@ public class Main {
 
         while (continuar) {
             try {
+                // Menu Principal
                 System.out.println("=== Menu de Preparação de Pratos ===");
                 System.out.println("1. Preparar Pizza");
                 System.out.println("2. Preparar Lasanha");
                 System.out.println("3. Preparar Nhoque");
                 System.out.println("4. Sair");
                 System.out.print("Escolha uma opção: ");
-                int escolhaPrato = Integer.parseInt(scanner.nextLine()); // Captura exceções de entrada inválida
+
+                int escolhaPrato = Integer.parseInt(scanner.nextLine());
 
                 if (escolhaPrato == 4) {
                     System.out.println("Encerrando o programa. Até mais!");
@@ -29,24 +31,32 @@ public class Main {
                     break;
                 }
 
+                // Validação da escolha do prato
+                if (escolhaPrato < 1 || escolhaPrato > 3) {
+                    System.out.println("Opção inválida, escolha novamente.\n");
+                    continue;
+                }
+
+                // Menu de Modos de Preparo
                 System.out.println("=== Modos de Preparo ===");
                 System.out.println("1. Forno a Lenha");
                 System.out.println("2. Fogão");
                 System.out.print("Escolha o modo de preparo: ");
+
                 int escolhaModoPreparo = Integer.parseInt(scanner.nextLine());
 
+                // Validação do modo de preparo
                 ModoPreparo modoPreparo;
-                switch (escolhaModoPreparo) {
-                    case 1:
-                        modoPreparo = ModoPreparo.FORNO_A_LENHA;
-                        break;
-                    case 2:
-                        modoPreparo = ModoPreparo.FOGAO;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Modo de preparo inválido."); // Lança exceção
+                if (escolhaModoPreparo == 1) {
+                    modoPreparo = ModoPreparo.FORNO_A_LENHA;
+                } else if (escolhaModoPreparo == 2) {
+                    modoPreparo = ModoPreparo.FOGAO;
+                } else {
+                    System.out.println("Opção inválida, escolha novamente.\n");
+                    continue;
                 }
 
+                // Criação do prato com base na escolha
                 PratoFactory pratoFactory;
                 switch (escolhaPrato) {
                     case 1:
@@ -59,17 +69,20 @@ public class Main {
                         pratoFactory = new NhoqueFactory();
                         break;
                     default:
-                        throw new IllegalArgumentException("Prato inválido."); // Lança exceção
+                        // Esta parte nunca será alcançada devido à validação anterior
+                        System.out.println("Opção inválida, escolha novamente.\n");
+                        continue;
                 }
 
+                // Preparo do prato
                 pratoFactory.prepararPrato(modoPreparo);
                 System.out.println("Prato preparado com sucesso!\n");
 
             } catch (NumberFormatException e) {
-                System.out.println("Erro: Entrada inválida. Por favor, insira um número.");
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
+                // Trata entradas não numéricas
+                System.out.println("Erro: Entrada inválida. Por favor, insira um número.\n");
             } catch (Exception e) {
+                // Trata qualquer outro erro inesperado
                 System.out.println("Erro inesperado: " + e.getMessage());
             }
         }
